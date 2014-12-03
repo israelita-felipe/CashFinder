@@ -30,7 +30,7 @@ public class Relatorio extends AbstractAviso {
      * @param aviso
      * @return boolean
      */
-    public boolean addAviso(Aviso aviso) {
+    public boolean addAviso(Aviso aviso) throws UnsupportedOperationException{
         this.totalRemovido = this.totalRemovido + aviso.getValorTotal();
         if (this.totalRemovido < 0) {
             this.totalRemovido = this.totalRemovido - aviso.getValorTotal();
