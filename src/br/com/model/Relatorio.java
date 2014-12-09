@@ -18,7 +18,7 @@ import java.util.SortedSet;
 public class Relatorio extends AbstractAviso {
 
     private final ArrayList<Aviso> removidos = new ArrayList<>();
-    private Float totalRemovido;
+    private Float totalRemovido = (float) 0;
 
     public Relatorio(Float valorTotal, Date data) {
         super(valorTotal, data);
@@ -64,5 +64,5 @@ public class Relatorio extends AbstractAviso {
             aviso = new Aviso(valor, getData());
         }
         return null;
-    }
+    }  
 }

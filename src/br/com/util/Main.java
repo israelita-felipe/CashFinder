@@ -19,6 +19,7 @@ public class Main {
         r.addValor(new Float(10));
         r.addValor(new Float(10));
         r.addValor(new Float(30));
-        System.out.println(r.buscar(new Float(40)));
+        System.out.println(r.getValores());
+        System.out.println(r.buscar(new Float(40)).getValores());
     }
 }

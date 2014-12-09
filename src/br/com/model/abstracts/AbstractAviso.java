@@ -22,7 +22,7 @@ public abstract class AbstractAviso implements InterfaceAviso {
     private Float somatorio = (float) 0;
 
     public AbstractAviso(Float valorTotal, Date data) {
-        this.valorTotal=  valorTotal;
+        this.valorTotal = valorTotal;
         this.data = data;
     }
 
@@ -35,6 +35,8 @@ public abstract class AbstractAviso implements InterfaceAviso {
         } else if (this.valorTotal.equals(this.somatorio)) {
             this.valores.add(valor);
             return SOMATORIO;
+        } else {
+            this.valores.add(valor);
         }
         return !SOMATORIO;
     }

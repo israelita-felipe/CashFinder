@@ -17,7 +17,5 @@ public class Aviso extends AbstractAviso {
     public Aviso(Float valorTotal, Date data) {
         super(valorTotal, data);
     }
-
-
-
+    
 }
