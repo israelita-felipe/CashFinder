@@ -8,6 +8,7 @@ package br.com.model;
 import br.com.model.abstracts.AbstractAviso;
 import br.com.util.Combination;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.SortedSet;
 
 /**
@@ -19,7 +20,8 @@ public class Relatorio extends AbstractAviso {
     private final ArrayList<Aviso> removidos = new ArrayList<>();
     private Float totalRemovido;
 
-    public Relatorio() {
+    public Relatorio(Float valorTotal, Date data) {
+        super(valorTotal, data);
     }
 
     public Float valorRestante() {
@@ -46,18 +48,20 @@ public class Relatorio extends AbstractAviso {
 
     public Aviso buscar(Float valor) {
         SortedSet<SortedSet<Comparable>> possibilidades = Combination.getAllCombinations(this);
-        Aviso aviso = new Aviso();
+        System.out.println(possibilidades);
+        Aviso aviso = new Aviso(valor, getData());
         for (SortedSet<Comparable> c : possibilidades) {
             for (Comparable comp : c) {
                 try {
                     if (aviso.addValor((Float) comp)) {
+                        this.addAviso(aviso);
                         return aviso;
                     }
                 } catch (UnsupportedOperationException ex) {
                     break;
                 }
             }
-            aviso = new Aviso();
+            aviso = new Aviso(valor, getData());
         }
         return null;
     }

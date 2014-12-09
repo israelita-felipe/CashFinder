@@ -22,7 +22,6 @@ import java.util.TreeSet;
 public class Combination {
 
     public static SortedSet<SortedSet<Comparable>> getAllCombinations(Relatorio relatorio) {
-        Float[] status = (Float[]) relatorio.getValores().toArray();
 
         SortedSet<SortedSet<Comparable>> allCombList = new TreeSet<>(new Comparator<SortedSet<Comparable>>() {
 
@@ -41,15 +40,15 @@ public class Combination {
             }
         });
 
-        for (Float nstatus : status) {
+        for (Float nstatus : relatorio.getValores()) {
             allCombList.add(new TreeSet<>(Arrays.asList(nstatus)));
         }
 
-        for (int nivel = 1; nivel < status.length; nivel++) {
+        for (int nivel = 1; nivel < relatorio.getValores().size(); nivel++) {
             List<SortedSet<Comparable>> statusAntes = new ArrayList<>(allCombList);
             for (Set<Comparable> antes : statusAntes) {
                 SortedSet<Comparable> novo = new TreeSet<>(antes);
-                novo.add(status[nivel]);
+                novo.add(relatorio.getValores().get(nivel));
                 allCombList.add(novo);
             }
         }

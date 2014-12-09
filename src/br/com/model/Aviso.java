@@ -6,6 +6,7 @@
 package br.com.model;
 
 import br.com.model.abstracts.AbstractAviso;
+import java.util.Date;
 
 /**
  *
@@ -13,7 +14,10 @@ import br.com.model.abstracts.AbstractAviso;
  */
 public class Aviso extends AbstractAviso {
 
-    public Aviso() {
+    public Aviso(Float valorTotal, Date data) {
+        super(valorTotal, data);
     }
+
+
 
 }

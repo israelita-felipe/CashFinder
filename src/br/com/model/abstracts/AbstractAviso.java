@@ -6,6 +6,7 @@
 package br.com.model.abstracts;
 
 import br.com.model.interfaces.InterfaceAviso;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -13,18 +14,23 @@ import java.util.List;
  *
  * @author israel
  */
-public class AbstractAviso implements InterfaceAviso {
+public abstract class AbstractAviso implements InterfaceAviso {
 
     private Date data;
-    private Float valorTotal;
-    private List<Float> valores;
-    private Float somatorio;
+    private Float valorTotal = (float) 0;
+    private List<Float> valores = new ArrayList<>();
+    private Float somatorio = (float) 0;
+
+    public AbstractAviso(Float valorTotal, Date data) {
+        this.valorTotal=  valorTotal;
+        this.data = data;
+    }
 
     @Override
-    public boolean addValor(Float valor) throws UnsupportedOperationException{
-        this.somatorio = this.somatorio + valor;        
+    public boolean addValor(Float valor) throws UnsupportedOperationException {
+        this.somatorio = this.somatorio + valor;
         if (this.somatorio > this.valorTotal) {
-            this.somatorio = this.somatorio - valor;        
+            this.somatorio = this.somatorio - valor;
             throw new UnsupportedOperationException("Valor superior ao valor total");
         } else if (this.valorTotal.equals(this.somatorio)) {
             this.valores.add(valor);
@@ -34,14 +40,13 @@ public class AbstractAviso implements InterfaceAviso {
     }
 
     @Override
-    public boolean removeValor(Float valor) throws UnsupportedOperationException{
+    public boolean removeValor(Float valor) throws UnsupportedOperationException {
         if (this.valores.isEmpty()) {
             throw new UnsupportedOperationException("Não há valores a serem retirados do aviso");
         }
         return true;
     }
 
-    
     public Date getData() {
         return data;
     }
