@@ -6,7 +6,9 @@
 package br.com.model;
 
 import br.com.model.abstracts.AbstractAviso;
+import br.com.util.Combination;
 import java.util.ArrayList;
+import java.util.SortedSet;
 
 /**
  *
@@ -30,7 +32,7 @@ public class Relatorio extends AbstractAviso {
      * @param aviso
      * @return boolean
      */
-    public boolean addAviso(Aviso aviso) throws UnsupportedOperationException{
+    public boolean addAviso(Aviso aviso) throws UnsupportedOperationException {
         this.totalRemovido = this.totalRemovido + aviso.getValorTotal();
         if (this.totalRemovido < 0) {
             this.totalRemovido = this.totalRemovido - aviso.getValorTotal();
@@ -43,6 +45,20 @@ public class Relatorio extends AbstractAviso {
     }
 
     public Aviso buscar(Float valor) {
+        SortedSet<SortedSet<Comparable>> possibilidades = Combination.getAllCombinations(this);
+        Aviso aviso = new Aviso();
+        for (SortedSet<Comparable> c : possibilidades) {
+            for (Comparable comp : c) {
+                try {
+                    if (aviso.addValor((Float) comp)) {
+                        return aviso;
+                    }
+                } catch (UnsupportedOperationException ex) {
+                    break;
+                }
+            }
+            aviso = new Aviso();
+        }
         return null;
     }
 }
