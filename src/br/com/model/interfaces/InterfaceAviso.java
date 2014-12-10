@@ -5,9 +5,6 @@
  */
 package br.com.model.interfaces;
 
-import java.util.Date;
-import java.util.List;
-
 /**
  *
  * @author israel
@@ -17,7 +14,7 @@ public interface InterfaceAviso {
     final boolean SOMATORIO = true;
 
     /**
-     * Retorna true quando valor total iagual ao somatório dos valores
+     * Retorna true quando valor total igual ao somatório dos valores
      *
      * @param valor
      * @return boolean
@@ -30,5 +27,5 @@ public interface InterfaceAviso {
      * @param valor
      * @return booelan
      */
-    boolean removeValor(Float valor) throws UnsupportedOperationException;
+    boolean removeValor(Float valor);
 }

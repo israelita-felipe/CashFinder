@@ -5,8 +5,10 @@
  */
 package br.com.util;
 
-import br.com.model.Relatorio;
-import java.util.Date;
+import java.io.FileNotFoundException;
+import java.text.ParseException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -15,11 +17,10 @@ import java.util.Date;
 public class Main {
 
     public static void main(String[] args) {
-        Relatorio r = new Relatorio(new Float(50), new Date());
-        r.addValor(new Float(10));
-        r.addValor(new Float(10));
-        r.addValor(new Float(30));
-        System.out.println(r.getValores());
-        System.out.println(r.buscar(new Float(40)).getValores());
+        try {
+            System.out.println(Retorno.getRetorno("E:\\Arquivos\\Downloads\\Cx.1717.RET"));
+        } catch (FileNotFoundException | ParseException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }
