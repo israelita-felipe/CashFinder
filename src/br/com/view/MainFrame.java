@@ -11,6 +11,7 @@ import br.com.util.Retorno;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.text.ParseException;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
@@ -55,9 +56,13 @@ public class MainFrame extends javax.swing.JFrame {
         valoresList = new javax.swing.JList();
         jScrollPane2 = new javax.swing.JScrollPane();
         avisosList = new javax.swing.JList();
+        restanteLabel = new javax.swing.JLabel();
         jMenuBar2 = new javax.swing.JMenuBar();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
+        jMenuItem3 = new javax.swing.JMenuItem();
+        jMenu3 = new javax.swing.JMenu();
+        jMenuItem4 = new javax.swing.JMenuItem();
         avisoList = new javax.swing.JInternalFrame();
         jScrollPane3 = new javax.swing.JScrollPane();
         detalhamentoList = new javax.swing.JList();
@@ -72,7 +77,7 @@ public class MainFrame extends javax.swing.JFrame {
         relatorioInternalFrame.setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);
         relatorioInternalFrame.setMaximizable(true);
         relatorioInternalFrame.setResizable(true);
-        relatorioInternalFrame.setTitle("Arquivo");
+        relatorioInternalFrame.setTitle("Arquivo retorno");
         relatorioInternalFrame.setVisible(true);
 
         dataLabel.setText("Data");
@@ -91,7 +96,10 @@ public class MainFrame extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(avisosList);
 
+        restanteLabel.setText("Restante");
+
         jMenu2.setText("Arquivo");
+        jMenu2.setEnabled(true);
 
         jMenuItem2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, java.awt.event.InputEvent.CTRL_MASK));
         jMenuItem2.setText("Buscar");
@@ -102,7 +110,29 @@ public class MainFrame extends javax.swing.JFrame {
         });
         jMenu2.add(jMenuItem2);
 
+        jMenuItem3.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_L, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem3.setText("Limpar");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem3);
+
         jMenuBar2.add(jMenu2);
+
+        jMenu3.setText("Exibir");
+
+        jMenuItem4.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem4.setText("Relatório de retorno");
+        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem4ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItem4);
+
+        jMenuBar2.add(jMenu3);
 
         relatorioInternalFrame.setJMenuBar(jMenuBar2);
 
@@ -113,6 +143,7 @@ public class MainFrame extends javax.swing.JFrame {
             .addGroup(relatorioInternalFrameLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(relatorioInternalFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(restanteLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(dataLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(relatorioInternalFrameLayout.createSequentialGroup()
                         .addGroup(relatorioInternalFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -132,8 +163,10 @@ public class MainFrame extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(totalLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(restanteLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(relatorioInternalFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 227, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 208, Short.MAX_VALUE)
                     .addComponent(jScrollPane1))
                 .addContainerGap())
         );
@@ -146,7 +179,7 @@ public class MainFrame extends javax.swing.JFrame {
         avisoList.setMaximizable(true);
         avisoList.setResizable(true);
         avisoList.setTitle("Detalhamento");
-        avisoList.setVisible(true);
+        avisoList.setVisible(false);
 
         detalhamentoList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane3.setViewportView(detalhamentoList);
@@ -236,18 +269,34 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void avisosListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_avisosListMouseClicked
         // TODO add your handling code here:
-        this.avisoList.updateUI();
-        this.detalhamentoList.updateUI();
-        this.valoresList.updateUI();
-        valoresDetalhamento.clear();
-        for(Float f:avisos.get(avisosList.getSelectedIndex()).getValores()){
-            valoresDetalhamento.addElement(f);
+        int index = avisosList.getSelectedIndex();
+        if (index != -1) {
+            this.avisoList.updateUI();
+            this.detalhamentoList.updateUI();
+            this.valoresList.updateUI();
+            valoresDetalhamento.clear();
+            for (Float f : avisos.get(index).getValores()) {
+                valoresDetalhamento.addElement(f);
+            }
+            this.avisoList.setVisible(true);
         }
     }//GEN-LAST:event_avisosListMouseClicked
+
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        // TODO add your handling code here:
+        relatorio = new Relatorio((float)0, new Date());
+        update();
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
+
+    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+        // TODO add your handling code here:
+        relatorioInternalFrame.setVisible(true);
+    }//GEN-LAST:event_jMenuItem4ActionPerformed
 
     private void update() {
         this.dataLabel.setText("Data: " + this.relatorio.getData());
         this.totalLabel.setText("Total: " + this.relatorio.getValorTotal());
+        this.restanteLabel.setText("Restante: " + this.relatorio.valorRestante());
         this.valoresRelatorio.clear();
         this.avisos.clear();
         for (Float f : this.relatorio.getValores()) {
@@ -269,7 +318,7 @@ public class MainFrame extends javax.swing.JFrame {
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
+                if ("metal".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
@@ -299,15 +348,19 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JList detalhamentoList;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuBar jMenuBar2;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JInternalFrame relatorioInternalFrame;
+    private javax.swing.JLabel restanteLabel;
     private javax.swing.JLabel totalLabel;
     private javax.swing.JList valoresList;
     // End of variables declaration//GEN-END:variables

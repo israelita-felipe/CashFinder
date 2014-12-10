@@ -27,9 +27,7 @@ public class Retorno {
         Float total = getTotal(arquivo.get(arquivo.size() - 1));
         List<Float> valores = getValores(arquivo);
         Relatorio r = new Relatorio(total, data);
-        for (Float valorToAdd : valores) {
-            r.addValor(valorToAdd);
-        }
+        r.setValores(valores);
         return r;
     }
 
