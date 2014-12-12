@@ -42,7 +42,7 @@ public class Combination {
         int name = 0;
         for (Float nstatus : relatorio.getValores()) {
             allCombList.add(new ArrayList<>(Arrays.asList(nstatus)));
-            ArchiveWriter.write(name++, new ArrayList<>(Arrays.asList(nstatus)));
+            FileManager.write(name++, new ArrayList<>(Arrays.asList(nstatus)));
         }
 
         for (int nivel = 1; nivel < relatorio.getValores().size(); nivel++) {
@@ -51,7 +51,7 @@ public class Combination {
                 List<Comparable> novo = new ArrayList<>(antes);
                 novo.add(relatorio.getValores().get(nivel));
                 allCombList.add(novo);
-                ArchiveWriter.write(name++, novo);
+                FileManager.write(name++, novo);
             }
         }
         return allCombList;

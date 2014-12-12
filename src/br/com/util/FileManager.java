@@ -13,7 +13,7 @@ import java.util.List;
  *
  * @author Cliente
  */
-public class ArchiveWriter {
+public class FileManager {
 
     private static FileWriter writer;
 
