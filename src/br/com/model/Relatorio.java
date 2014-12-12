@@ -7,6 +7,7 @@ package br.com.model;
 
 import br.com.model.abstracts.AbstractAviso;
 import br.com.util.Combination;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -92,8 +93,9 @@ public class Relatorio extends AbstractAviso {
      *
      * @param valor
      * @return
+     * @throws java.io.IOException
      */
-    public Aviso buscar(Float valor) {
+    public Aviso buscar(Float valor) throws IOException {
         // RETORNA TODAS AS POSSIBILIDADES DE COMBINAÇÕES DO RELATÓRIO ATUAL
         SortedSet<List<Comparable>> possibilidades = Combination.getAllCombinations(this);
         // CRIA UM NOVO AVISO COM O VALOR PROCURADO E A DATA DO RELATÓRIO

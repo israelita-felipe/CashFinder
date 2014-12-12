@@ -6,6 +6,9 @@
 package br.com.view;
 
 import br.com.model.Relatorio;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -98,9 +101,13 @@ public class Find extends javax.swing.JDialog {
     }//GEN-LAST:event_valorTextFieldActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-        this.r.buscar(Float.valueOf(this.valorTextField.getText()));
-        setVisible(false);
+        try {
+            // TODO add your handling code here:
+            this.r.buscar(Float.valueOf(this.valorTextField.getText()));
+            setVisible(false);
+        } catch (IOException ex) {
+            Logger.getLogger(Find.class.getName()).log(Level.SEVERE, null, ex);
+        }        
     }//GEN-LAST:event_jButton1ActionPerformed
 
 
