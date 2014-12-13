@@ -8,6 +8,7 @@ package br.com.util;
 import br.com.model.Relatorio;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -24,8 +25,8 @@ public class Retorno {
     public static Relatorio getRetorno(String path) throws FileNotFoundException, ParseException, UnsupportedOperationException {
         List<String> arquivo = readLines(path);
         Date data = getData(arquivo.get(0));
-        Float total = getTotal(arquivo.get(arquivo.size() - 1));
-        List<Float> valores = getValores(arquivo);
+        BigDecimal total = getTotal(arquivo.get(arquivo.size() - 1));
+        List<BigDecimal> valores = getValores(arquivo);
         Relatorio r = new Relatorio(total, data);
         r.setValores(valores);
         return r;
@@ -44,21 +45,21 @@ public class Retorno {
         return new SimpleDateFormat("yyyyMMdd").parse(line.substring(65, 73));
     }
 
-    private static Float format(String toFloat) {
+    private static BigDecimal format(String toFloat) {
         String cents = toFloat.substring(toFloat.length() - 2, toFloat.length());
         String integer = toFloat.substring(0, toFloat.length() - 2);
-        return new Float(integer + "." + cents);
+        return new BigDecimal(integer + "." + cents);
     }
 
-    private static List<Float> getValores(List<String> valores) {
-        List<Float> list = new ArrayList<>();
+    private static List<BigDecimal> getValores(List<String> valores) {
+        List<BigDecimal> list = new ArrayList<>();
         for (int i = 1; i < valores.size() - 1; i++) {
             list.add(format(valores.get(i).substring(81, 93)));
         }
         return list;
     }
 
-    private static Float getTotal(String line) {
+    private static BigDecimal getTotal(String line) {
         return format(line.substring(8, 24));
     }
 

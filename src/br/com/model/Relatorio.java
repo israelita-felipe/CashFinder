@@ -7,7 +7,9 @@ package br.com.model;
 
 import br.com.model.abstracts.AbstractAviso;
 import br.com.util.Combination;
+import br.com.util.FileManager;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -25,14 +27,14 @@ public class Relatorio extends AbstractAviso {
     @Column(name = "removidos")
     private final ArrayList<Aviso> removidos = new ArrayList<>();
     @Column(name = "total_removido")
-    private Float totalRemovido = (float) 0;
+    private BigDecimal totalRemovido = new BigDecimal(0);
 
-    public Relatorio(Float valorTotal, Date data) {
+    public Relatorio(BigDecimal valorTotal, Date data) {
         super(valorTotal, data);
     }
 
-    public Float valorRestante() {
-        return this.getValorTotal() - this.totalRemovido;
+    public BigDecimal valorRestante() {
+        return this.getValorTotal().subtract(this.totalRemovido);
     }
 
     public ArrayList<Aviso> getRemovidos() {
@@ -47,11 +49,11 @@ public class Relatorio extends AbstractAviso {
      */
     public boolean addAviso(Aviso aviso) throws UnsupportedOperationException {
         // ADICIONA AO VALOR TOTAL DE REMOVIDOS
-        this.totalRemovido = this.totalRemovido + aviso.getValorTotal();
+        this.totalRemovido = this.totalRemovido.add(aviso.getValorTotal());
         // VERIFICA SE O VALOR REMOVER É MAIOR QUE O PERMITIDO
-        if (this.totalRemovido > this.getValorTotal()) {
+        if (this.totalRemovido.compareTo(this.getValorTotal()) > 0) {
             // SE SIM RESTAURA O VALOR ORIGINAL E LANÇA EXCESSÃO
-            this.totalRemovido = this.totalRemovido - aviso.getValorTotal();
+            this.totalRemovido = this.totalRemovido.subtract(aviso.getValorTotal());
             throw new UnsupportedOperationException("Valor do aviso é maior que o esperado");
         } else if (totalRemovido.equals(this.getValorTotal())) {
             // SE NÃO E O VALOR TOTAL FOR IQUAL AO REMOVIDO
@@ -78,13 +80,8 @@ public class Relatorio extends AbstractAviso {
      */
     public boolean removeAviso(Aviso aviso) {
         // PARA CADA VALOR DO AVISO
-        for (Float f : aviso.getValores()) {
-            // REMOVE O VALOR DO RELATÓRIO ATUAL
-            if (!removeValor(f)) {
-                return false;
-            }
-        }
-        return true;
+        // REMOVE O VALOR DO RELATÓRIO ATUAL        
+        return aviso.getValores().stream().noneMatch((f) -> (!removeValor(f)));
     }
 
     /**
@@ -95,33 +92,8 @@ public class Relatorio extends AbstractAviso {
      * @return
      * @throws java.io.IOException
      */
-    public Aviso buscar(Float valor) throws IOException {
-        // RETORNA TODAS AS POSSIBILIDADES DE COMBINAÇÕES DO RELATÓRIO ATUAL
-        SortedSet<List<Comparable>> possibilidades = Combination.getAllCombinations(this);
-        // CRIA UM NOVO AVISO COM O VALOR PROCURADO E A DATA DO RELATÓRIO
-        Aviso aviso = new Aviso(valor, getData());
-        for (List<Comparable> c : possibilidades) {
-            // PARA CADA POSSÍVEL COMBINAÇÃO
-            for (Comparable comp : c) {
-                try {
-                    // SE FOR POSSÍVEL ADICIONAR E RETORNO FOR TRUE, O QUE
-                    // INDICA QUE O VALOR TOTAL FOI ENCONTRADO
-                    if (aviso.addValor((Float) comp)) {
-                        // ADICIONE O AVISO AOS REMOVIDOS
-                        this.addAviso(aviso);
-                        // RETORNE O AVISO ENCONTRADO
-                        return aviso;
-                    }
-                } catch (UnsupportedOperationException ex) {
-                    // CASO O VALOR ULTRAPASSE, PARE A EXECUÇÃO DO FOR INTERNO
-                    break;
-                }
-            }
-            // SE NÃO FOI ENCONTRADO AVISO ATÉ O MOMENTO ATRIBUA UM NOVO AVISO
-            // AO AVISO ATUAL PARA A PRÓXIMA INTERAÇÃO
-            aviso = new Aviso(valor, getData());
-        }
-        return null;
+    public Aviso buscar(BigDecimal valor) throws IOException {
+        return Combination.getAviso(this, valor);
     }
 
     @Override

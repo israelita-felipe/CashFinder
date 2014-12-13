@@ -7,6 +7,7 @@ package br.com.view;
 
 import br.com.model.Relatorio;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -103,7 +104,7 @@ public class Find extends javax.swing.JDialog {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         try {
             // TODO add your handling code here:
-            this.r.buscar(Float.valueOf(this.valorTextField.getText()));
+            this.r.buscar(new BigDecimal(this.valorTextField.getText()));
             setVisible(false);
         } catch (IOException ex) {
             Logger.getLogger(Find.class.getName()).log(Level.SEVERE, null, ex);

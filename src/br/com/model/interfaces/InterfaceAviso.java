@@ -5,6 +5,8 @@
  */
 package br.com.model.interfaces;
 
+import java.math.BigDecimal;
+
 /**
  *
  * @author israel
@@ -19,7 +21,7 @@ public interface InterfaceAviso {
      * @param valor
      * @return boolean
      */
-    boolean addValor(Float valor) throws UnsupportedOperationException;
+    boolean addValor(BigDecimal valor) throws UnsupportedOperationException;
 
     /**
      * Retorna verdadeiro se o valor pode ser retirado
@@ -27,5 +29,5 @@ public interface InterfaceAviso {
      * @param valor
      * @return booelan
      */
-    boolean removeValor(Float valor);
+    boolean removeValor(BigDecimal valor);
 }

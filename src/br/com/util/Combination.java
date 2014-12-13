@@ -5,15 +5,13 @@
  */
 package br.com.util;
 
+import br.com.model.Aviso;
 import br.com.model.Relatorio;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 /**
  *
@@ -21,39 +19,65 @@ import java.util.TreeSet;
  */
 public class Combination {
 
-    public static SortedSet<List<Comparable>> getAllCombinations(Relatorio relatorio) throws IOException {
-
-        SortedSet<List<Comparable>> allCombList = new TreeSet<>(new Comparator<List<Comparable>>() {
-
-            @Override
-            public int compare(List<Comparable> o1, List<Comparable> o2) {
-                int sizeComp = o1.size() - o2.size();
-                if (sizeComp == 0) {
-                    Iterator<Comparable> o1iIterator = o1.iterator();
-                    Iterator<Comparable> o2iIterator = o2.iterator();
-                    while (sizeComp == 0 && o1iIterator.hasNext()) {
-                        sizeComp = o1iIterator.next().compareTo(o2iIterator.next());
-                    }
-                }
-                return sizeComp;
-            }            
-            
-        });
+    public static Aviso getAviso(Relatorio relatorio, BigDecimal valor) throws IOException {
         int name = 0;
-        for (Float nstatus : relatorio.getValores()) {
-            allCombList.add(new ArrayList<>(Arrays.asList(nstatus)));
-            FileManager.write(name++, new ArrayList<>(Arrays.asList(nstatus)));
+        Aviso aviso = new Aviso(valor, relatorio.getData());
+        for (BigDecimal nstatus : relatorio.getValores()) {
+            //allCombList.add(new ArrayList<>(Arrays.asList(nstatus)));
+            try {
+                // SE FOR POSSÍVEL ADICIONAR E RETORNO FOR TRUE, O QUE
+                // INDICA QUE O VALOR TOTAL FOI ENCONTRADO
+                if (aviso.addValor((BigDecimal) nstatus)) {
+                    // ADICIONE O AVISO AOS REMOVIDOS
+                    relatorio.addAviso(aviso);
+                    FileManager.deleteAll();
+                    // RETORNE O AVISO ENCONTRADO
+                    return aviso;
+                }
+                aviso = new Aviso(valor, relatorio.getData());
+            } catch (UnsupportedOperationException ex) {
+                // CASO O VALOR ULTRAPASSE, PARE A EXECUÇÃO DO FOR INTERNO
+                aviso = new Aviso(valor, relatorio.getData());
+            }
+            List l = new ArrayList<>(Arrays.asList(nstatus));
+            // SE O VALOR TOTAL DA COMBINAÇÃO FOR MENOR QUE O VALOR TOTAL GRAVA NO ARQUIVO
+            if (Aviso.getTotal(l).compareTo(valor) < 0) {
+                FileManager.write(name++, l);
+            }
         }
 
         for (int nivel = 1; nivel < relatorio.getValores().size(); nivel++) {
-            List<List<Comparable>> statusAntes = new ArrayList<>(allCombList);
-            for (List<Comparable> antes : statusAntes) {
-                List<Comparable> novo = new ArrayList<>(antes);
+            int nameAntes = name;
+            for (int i = 0; i < nameAntes; i++) {
+                List<Comparable> novo = FileManager.getList(i);
                 novo.add(relatorio.getValores().get(nivel));
-                allCombList.add(novo);
-                FileManager.write(name++, novo);
+                for (Comparable comp : novo) {
+                    try {
+                        // SE FOR POSSÍVEL ADICIONAR E RETORNO FOR TRUE, O QUE
+                        // INDICA QUE O VALOR TOTAL FOI ENCONTRADO
+                        if (aviso.addValor((BigDecimal) comp)) {
+                            // ADICIONE O AVISO AOS REMOVIDOS
+                            relatorio.addAviso(aviso);
+                            FileManager.deleteAll();
+                            // RETORNE O AVISO ENCONTRADO
+                            return aviso;
+                        }
+                    } catch (UnsupportedOperationException ex) {
+                        // CASO O VALOR ULTRAPASSE, PARE A EXECUÇÃO DO FOR INTERNO
+                        break;
+                    }
+                }
+                // SE NÃO FOI ENCONTRADO AVISO ATÉ O MOMENTO ATRIBUA UM NOVO AVISO
+                // AO AVISO ATUAL PARA A PRÓXIMA INTERAÇÃO
+                aviso = new Aviso(valor, relatorio.getData());
+                // SE O VALOR TOTAL DA COMBINAÇÃO FOR MENOR QUE O VALOR TOTAL GRAVA NO ARQUIVO
+                if (Aviso.getTotal(novo).compareTo(valor) < 0) {
+                    FileManager.write(name++, novo);
+                }
             }
         }
-        return allCombList;
+        FileManager.deleteAll();
+        return null;
     }
+
 }

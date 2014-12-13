@@ -8,12 +8,10 @@ package br.com.view;
 import br.com.model.Aviso;
 import br.com.model.Relatorio;
 import br.com.util.Retorno;
-import java.io.File;
 import java.io.FileNotFoundException;
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -25,9 +23,9 @@ import javax.swing.JOptionPane;
 public class MainFrame extends javax.swing.JFrame {
 
     private Relatorio relatorio;
-    private final DefaultListModel<Float> valoresRelatorio = new DefaultListModel<>();
+    private final DefaultListModel<BigDecimal> valoresRelatorio = new DefaultListModel<>();
     private final DefaultListModel<Aviso> avisos = new DefaultListModel<>();
-    private final DefaultListModel<Float> valoresDetalhamento = new DefaultListModel<>();
+    private final DefaultListModel<BigDecimal> valoresDetalhamento = new DefaultListModel<>();
 
     /**
      * Creates new form MainFrame
@@ -129,7 +127,7 @@ public class MainFrame extends javax.swing.JFrame {
             .addGroup(relatorioInternalFrameLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(relatorioInternalFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(restanteLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(restanteLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 326, Short.MAX_VALUE)
                     .addComponent(dataLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(relatorioInternalFrameLayout.createSequentialGroup()
                         .addGroup(relatorioInternalFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -152,7 +150,7 @@ public class MainFrame extends javax.swing.JFrame {
                 .addComponent(restanteLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(relatorioInternalFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 208, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE)
                     .addComponent(jScrollPane1))
                 .addContainerGap())
         );
@@ -176,14 +174,14 @@ public class MainFrame extends javax.swing.JFrame {
             avisoListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(avisoListLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 236, Short.MAX_VALUE)
                 .addContainerGap())
         );
         avisoListLayout.setVerticalGroup(
             avisoListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(avisoListLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 288, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 283, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -200,7 +198,7 @@ public class MainFrame extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 690, Short.MAX_VALUE)
+            .addGap(0, 930, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -274,16 +272,16 @@ public class MainFrame extends javax.swing.JFrame {
             this.detalhamentoList.updateUI();
             this.valoresList.updateUI();
             valoresDetalhamento.clear();
-            for (Float f : avisos.get(index).getValores()) {
+            avisos.get(index).getValores().stream().forEach((f) -> {
                 valoresDetalhamento.addElement(f);
-            }
+            });
             this.avisoList.setVisible(true);
         }
     }//GEN-LAST:event_avisosListMouseClicked
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
         // TODO add your handling code here:
-        relatorio = new Relatorio((float)0, new Date());
+        relatorio = new Relatorio(new BigDecimal(0), new Date());
         update();
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
@@ -298,12 +296,12 @@ public class MainFrame extends javax.swing.JFrame {
         this.restanteLabel.setText("Restante: " + this.relatorio.valorRestante());
         this.valoresRelatorio.clear();
         this.avisos.clear();
-        for (Float f : this.relatorio.getValores()) {
+        this.relatorio.getValores().stream().forEach((f) -> {
             this.valoresRelatorio.addElement(f);
-        }
-        for (Aviso a : this.relatorio.getRemovidos()) {
+        });
+        this.relatorio.getRemovidos().stream().forEach((a) -> {
             this.avisos.addElement(a);
-        }
+        });
     }
 
     /**
@@ -317,20 +315,16 @@ public class MainFrame extends javax.swing.JFrame {
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
+                if ("Metal".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        
         //</editor-fold>
 
         /* Create and display the form */
