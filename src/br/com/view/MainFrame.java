@@ -8,12 +8,16 @@ package br.com.view;
 import br.com.model.Aviso;
 import br.com.model.Relatorio;
 import br.com.util.Retorno;
+import java.awt.Toolkit;
 import java.io.FileNotFoundException;
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.swing.DefaultListModel;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 /**
@@ -50,19 +54,25 @@ public class MainFrame extends javax.swing.JFrame {
         relatorioInternalFrame = new javax.swing.JInternalFrame();
         dataLabel = new javax.swing.JLabel();
         totalLabel = new javax.swing.JLabel();
+        restanteLabel = new javax.swing.JLabel();
+        jSplitPane1 = new javax.swing.JSplitPane();
+        jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         valoresList = new javax.swing.JList();
+        relatorioLabelList = new javax.swing.JLabel();
+        jPanel3 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         avisosList = new javax.swing.JList();
-        restanteLabel = new javax.swing.JLabel();
+        detalhamentoLabelList = new javax.swing.JLabel();
         jMenuBar2 = new javax.swing.JMenuBar();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
         jMenuItem3 = new javax.swing.JMenuItem();
-        avisoList = new javax.swing.JInternalFrame();
+        jPanel1 = new javax.swing.JPanel();
+        jPanel4 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         detalhamentoList = new javax.swing.JList();
-        jPanel1 = new javax.swing.JPanel();
+        avisosDetalhamentoList = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -70,21 +80,47 @@ public class MainFrame extends javax.swing.JFrame {
         jMenuItem4 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Identificador de avisos");
+        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/br/com/view/icons/png/dollar179.png")));
 
         relatorioInternalFrame.setClosable(true);
         relatorioInternalFrame.setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);
+        relatorioInternalFrame.setIconifiable(true);
         relatorioInternalFrame.setMaximizable(true);
         relatorioInternalFrame.setResizable(true);
         relatorioInternalFrame.setTitle("Arquivo retorno");
+        relatorioInternalFrame.setAutoscrolls(true);
+        relatorioInternalFrame.setFrameIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/view/icons/png/folder12.png"))); // NOI18N
         relatorioInternalFrame.setVisible(true);
 
         dataLabel.setText("Data");
 
         totalLabel.setText("Total");
 
+        restanteLabel.setText("Restante");
+
+        jSplitPane1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        jPanel2.setLayout(new java.awt.BorderLayout());
+
+        jScrollPane1.setBorder(null);
+
         valoresList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         valoresList.setToolTipText("");
         jScrollPane1.setViewportView(valoresList);
+
+        jPanel2.add(jScrollPane1, java.awt.BorderLayout.CENTER);
+
+        relatorioLabelList.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        relatorioLabelList.setText("Relatório");
+        relatorioLabelList.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(204, 204, 204)));
+        jPanel2.add(relatorioLabelList, java.awt.BorderLayout.PAGE_START);
+
+        jSplitPane1.setLeftComponent(jPanel2);
+
+        jPanel3.setLayout(new java.awt.BorderLayout());
+
+        jScrollPane2.setBorder(null);
 
         avisosList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         avisosList.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -94,12 +130,22 @@ public class MainFrame extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(avisosList);
 
-        restanteLabel.setText("Restante");
+        jPanel3.add(jScrollPane2, java.awt.BorderLayout.CENTER);
+
+        detalhamentoLabelList.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        detalhamentoLabelList.setText("Avisos encontrados");
+        detalhamentoLabelList.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(204, 204, 204)));
+        jPanel3.add(detalhamentoLabelList, java.awt.BorderLayout.PAGE_START);
+
+        jSplitPane1.setRightComponent(jPanel3);
 
         jMenu2.setText("Arquivo");
+        jMenu2.setEnabled(true);
 
         jMenuItem2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/view/icons/png/magnifier1.png"))); // NOI18N
         jMenuItem2.setText("Buscar");
+        jMenuItem2.setEnabled(true);
         jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem2ActionPerformed(evt);
@@ -108,6 +154,7 @@ public class MainFrame extends javax.swing.JFrame {
         jMenu2.add(jMenuItem2);
 
         jMenuItem3.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_L, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/view/icons/png/recycle8.png"))); // NOI18N
         jMenuItem3.setText("Limpar");
         jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -127,16 +174,12 @@ public class MainFrame extends javax.swing.JFrame {
             .addGroup(relatorioInternalFrameLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(relatorioInternalFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(restanteLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 326, Short.MAX_VALUE)
+                    .addComponent(restanteLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 676, Short.MAX_VALUE)
                     .addComponent(dataLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jSplitPane1)
                     .addGroup(relatorioInternalFrameLayout.createSequentialGroup()
-                        .addGroup(relatorioInternalFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(relatorioInternalFrameLayout.createSequentialGroup()
-                                .addComponent(totalLabel)
-                                .addGap(0, 133, Short.MAX_VALUE))
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE)))
+                        .addComponent(totalLabel)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         relatorioInternalFrameLayout.setVerticalGroup(
@@ -149,67 +192,46 @@ public class MainFrame extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(restanteLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(relatorioInternalFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1))
+                .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 264, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
         desktopPane.add(relatorioInternalFrame);
-        relatorioInternalFrame.setBounds(10, 11, 360, 340);
+        relatorioInternalFrame.setBounds(10, 11, 710, 410);
 
-        avisoList.setClosable(true);
-        avisoList.setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);
-        avisoList.setMaximizable(true);
-        avisoList.setResizable(true);
-        avisoList.setTitle("Detalhamento");
-        avisoList.setVisible(false);
+        getContentPane().add(desktopPane, java.awt.BorderLayout.CENTER);
+
+        jPanel1.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 0, 0, 0, new java.awt.Color(204, 204, 204)));
+        jPanel1.setMaximumSize(new java.awt.Dimension(32767, 21));
+        jPanel1.setMinimumSize(new java.awt.Dimension(100, 21));
+        jPanel1.setPreferredSize(new java.awt.Dimension(690, 21));
+        jPanel1.setLayout(new java.awt.BorderLayout());
+        getContentPane().add(jPanel1, java.awt.BorderLayout.SOUTH);
+
+        jPanel4.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 1, 0, 1, new java.awt.Color(204, 204, 204)));
+        jPanel4.setMaximumSize(new java.awt.Dimension(200, 32767));
+        jPanel4.setMinimumSize(new java.awt.Dimension(200, 0));
+        jPanel4.setPreferredSize(new java.awt.Dimension(200, 437));
+        jPanel4.setLayout(new java.awt.BorderLayout());
+
+        jScrollPane3.setBorder(null);
 
         detalhamentoList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane3.setViewportView(detalhamentoList);
 
-        javax.swing.GroupLayout avisoListLayout = new javax.swing.GroupLayout(avisoList.getContentPane());
-        avisoList.getContentPane().setLayout(avisoListLayout);
-        avisoListLayout.setHorizontalGroup(
-            avisoListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(avisoListLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 236, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        avisoListLayout.setVerticalGroup(
-            avisoListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(avisoListLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 283, Short.MAX_VALUE)
-                .addContainerGap())
-        );
+        jPanel4.add(jScrollPane3, java.awt.BorderLayout.CENTER);
 
-        desktopPane.add(avisoList);
-        avisoList.setBounds(400, 10, 270, 340);
+        avisosDetalhamentoList.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        avisosDetalhamentoList.setText("Valores do aviso");
+        avisosDetalhamentoList.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(204, 204, 204)));
+        jPanel4.add(avisosDetalhamentoList, java.awt.BorderLayout.PAGE_START);
 
-        getContentPane().add(desktopPane, java.awt.BorderLayout.CENTER);
-
-        jPanel1.setMaximumSize(new java.awt.Dimension(32767, 21));
-        jPanel1.setMinimumSize(new java.awt.Dimension(100, 21));
-        jPanel1.setPreferredSize(new java.awt.Dimension(690, 21));
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 930, Short.MAX_VALUE)
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 21, Short.MAX_VALUE)
-        );
-
-        getContentPane().add(jPanel1, java.awt.BorderLayout.SOUTH);
+        getContentPane().add(jPanel4, java.awt.BorderLayout.EAST);
 
         jMenu1.setText("Arquivo");
 
         jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/view/icons/png/archive7.png"))); // NOI18N
         jMenuItem1.setText("Arquivo retorno");
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -223,6 +245,7 @@ public class MainFrame extends javax.swing.JFrame {
         jMenu3.setText("Exibir");
 
         jMenuItem4.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/view/icons/png/dark29.png"))); // NOI18N
         jMenuItem4.setText("Relatório de retorno");
         jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -235,7 +258,8 @@ public class MainFrame extends javax.swing.JFrame {
 
         setJMenuBar(jMenuBar1);
 
-        pack();
+        setSize(new java.awt.Dimension(946, 520));
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
@@ -268,14 +292,12 @@ public class MainFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
         int index = avisosList.getSelectedIndex();
         if (index != -1) {
-            this.avisoList.updateUI();
             this.detalhamentoList.updateUI();
             this.valoresList.updateUI();
             valoresDetalhamento.clear();
             avisos.get(index).getValores().stream().forEach((f) -> {
                 valoresDetalhamento.addElement(f);
             });
-            this.avisoList.setVisible(true);
         }
     }//GEN-LAST:event_avisosListMouseClicked
 
@@ -291,9 +313,9 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
     private void update() {
-        this.dataLabel.setText("Data: " + this.relatorio.getData());
-        this.totalLabel.setText("Total: " + this.relatorio.getValorTotal());
-        this.restanteLabel.setText("Restante: " + this.relatorio.valorRestante());
+        this.dataLabel.setText("Data: " + new SimpleDateFormat("dd/MM/yyyy").format(this.relatorio.getData()));
+        this.totalLabel.setText("Total: " + new DecimalFormat("R$ #,##0.00").format(this.relatorio.getValorTotal()));
+        this.restanteLabel.setText("Restante: " + new DecimalFormat("R$ #,##0.00").format(this.relatorio.valorRestante()));
         this.valoresRelatorio.clear();
         this.avisos.clear();
         this.relatorio.getValores().stream().forEach((f) -> {
@@ -315,7 +337,7 @@ public class MainFrame extends javax.swing.JFrame {
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Metal".equals(info.getName())) {
+                if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
@@ -329,15 +351,18 @@ public class MainFrame extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {
-            new MainFrame().setVisible(true);
+            MainFrame m = new MainFrame();
+            m.setExtendedState(JFrame.MAXIMIZED_BOTH);
+            m.setVisible(true);
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JInternalFrame avisoList;
+    private javax.swing.JLabel avisosDetalhamentoList;
     private javax.swing.JList avisosList;
     private javax.swing.JLabel dataLabel;
     private javax.swing.JDesktopPane desktopPane;
+    private javax.swing.JLabel detalhamentoLabelList;
     private javax.swing.JList detalhamentoList;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
@@ -349,10 +374,15 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JInternalFrame relatorioInternalFrame;
+    private javax.swing.JLabel relatorioLabelList;
     private javax.swing.JLabel restanteLabel;
     private javax.swing.JLabel totalLabel;
     private javax.swing.JList valoresList;

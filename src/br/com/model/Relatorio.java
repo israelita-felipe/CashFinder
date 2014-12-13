@@ -7,13 +7,10 @@ package br.com.model;
 
 import br.com.model.abstracts.AbstractAviso;
 import br.com.util.Combination;
-import br.com.util.FileManager;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-import java.util.SortedSet;
 import javax.persistence.Column;
 import javax.persistence.Table;
 

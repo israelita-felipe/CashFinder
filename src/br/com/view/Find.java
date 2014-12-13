@@ -6,17 +6,18 @@
 package br.com.view;
 
 import br.com.model.Relatorio;
+import br.com.util.JNumberFormatField;
+import br.com.util.Retorno;
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.text.DecimalFormat;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author Israel Araújo
  */
 public class Find extends javax.swing.JDialog {
-
+    
     private final Relatorio r;
 
     /**
@@ -41,21 +42,16 @@ public class Find extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        valorTextField = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
+        progressBar = new javax.swing.JProgressBar();
+        valorTextField = new JNumberFormatField(new DecimalFormat("0.00"));
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Valor");
         setModal(true);
         setModalExclusionType(java.awt.Dialog.ModalExclusionType.APPLICATION_EXCLUDE);
         setResizable(false);
-
-        valorTextField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                valorTextFieldActionPerformed(evt);
-            }
-        });
 
         jLabel1.setText("Valor: (R$ 00.00)");
 
@@ -66,6 +62,8 @@ public class Find extends javax.swing.JDialog {
             }
         });
 
+        valorTextField.setText("0,00");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -73,48 +71,53 @@ public class Find extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(valorTextField)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(progressBar, javax.swing.GroupLayout.DEFAULT_SIZE, 349, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton1))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
-                        .addGap(0, 337, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton1)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(valorTextField))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(45, 45, 45)
+                .addContainerGap()
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(valorTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
-                .addComponent(jButton1)
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(progressBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        pack();
+        setSize(new java.awt.Dimension(470, 137));
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void valorTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_valorTextFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_valorTextFieldActionPerformed
-
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        try {
-            // TODO add your handling code here:
-            this.r.buscar(new BigDecimal(this.valorTextField.getText()));
-            setVisible(false);
-        } catch (IOException ex) {
-            Logger.getLogger(Find.class.getName()).log(Level.SEVERE, null, ex);
-        }        
+        progressBar.setIndeterminate(true);
+        new Thread(() -> {
+            try {
+                // TODO add your handling code here:
+                r.buscar(Retorno.format(valorTextField.getText().replace(".", "").replace(",", "")));
+                progressBar.setIndeterminate(false);
+                setVisible(false);
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(null, "Algo inesperado ocorreu\n" + ex.getMessage());
+            }
+        }).start();
     }//GEN-LAST:event_jButton1ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JProgressBar progressBar;
     private javax.swing.JTextField valorTextField;
     // End of variables declaration//GEN-END:variables
 }

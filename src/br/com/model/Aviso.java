@@ -7,6 +7,7 @@ package br.com.model;
 
 import br.com.model.abstracts.AbstractAviso;
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Table;
@@ -24,7 +25,7 @@ public class Aviso extends AbstractAviso {
 
     @Override
     public String toString() {
-        return ""+this.getValorTotal()+this.getValores();
+        return ""+new DecimalFormat("R$ #,##0.00").format(this.getValorTotal());
     }    
     public static BigDecimal getTotal(List<Comparable> list){
         BigDecimal total = new BigDecimal(0);

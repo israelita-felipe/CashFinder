@@ -45,7 +45,7 @@ public class Retorno {
         return new SimpleDateFormat("yyyyMMdd").parse(line.substring(65, 73));
     }
 
-    private static BigDecimal format(String toFloat) {
+    public static BigDecimal format(String toFloat) {
         String cents = toFloat.substring(toFloat.length() - 2, toFloat.length());
         String integer = toFloat.substring(0, toFloat.length() - 2);
         return new BigDecimal(integer + "." + cents);
