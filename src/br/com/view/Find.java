@@ -6,6 +6,7 @@
 package br.com.view;
 
 import br.com.model.Relatorio;
+import br.com.util.FileManager;
 import br.com.util.JNumberFormatField;
 import br.com.util.Retorno;
 import java.io.IOException;
@@ -19,6 +20,7 @@ import javax.swing.JOptionPane;
 public class Find extends javax.swing.JDialog {
     
     private final Relatorio r;
+    private Thread processo;
 
     /**
      * Creates new form Find
@@ -42,10 +44,12 @@ public class Find extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroups = new javax.swing.ButtonGroup();
         jLabel1 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         progressBar = new javax.swing.JProgressBar();
         valorTextField = new JNumberFormatField(new DecimalFormat("0.00"));
+        jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Valor");
@@ -56,6 +60,7 @@ public class Find extends javax.swing.JDialog {
         jLabel1.setText("Valor: (R$ 00.00)");
 
         jButton1.setText("Buscar");
+        buttonGroups.add(jButton1);
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -63,6 +68,14 @@ public class Find extends javax.swing.JDialog {
         });
 
         valorTextField.setText("0,00");
+
+        jButton2.setText("Cancelar");
+        buttonGroups.add(jButton2);
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -72,12 +85,14 @@ public class Find extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(progressBar, javax.swing.GroupLayout.DEFAULT_SIZE, 349, Short.MAX_VALUE)
+                        .addComponent(jButton2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(progressBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton1))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addGap(0, 351, Short.MAX_VALUE))
                     .addComponent(valorTextField))
                 .addContainerGap())
         );
@@ -89,10 +104,12 @@ public class Find extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(valorTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(progressBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(progressBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jButton2))
+                .addContainerGap(19, Short.MAX_VALUE))
         );
 
         setSize(new java.awt.Dimension(470, 137));
@@ -101,7 +118,7 @@ public class Find extends javax.swing.JDialog {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         progressBar.setIndeterminate(true);
-        new Thread(() -> {
+       processo = new Thread(() -> {
             try {
                 // TODO add your handling code here:
                 r.buscar(Retorno.format(valorTextField.getText().replace(".", "").replace(",", "")));
@@ -110,12 +127,21 @@ public class Find extends javax.swing.JDialog {
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(null, "Algo inesperado ocorreu\n" + ex.getMessage());
             }
-        }).start();
+        });
+       processo.start();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        processo.interrupt();
+        FileManager.deleteAll();
+    }//GEN-LAST:event_jButton2ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.ButtonGroup buttonGroups;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JProgressBar progressBar;
     private javax.swing.JTextField valorTextField;
